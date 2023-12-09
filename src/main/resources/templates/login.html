@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments :: head}"></head>
+
+<body>
+<div class="body">
+    <h1>Login page</h1>
+    <p th:if="${loginError}" class="error">Wrong user or password</p>
+
+    <form th:action="@{/api/v1/auth/authenticate}" method="post">
+        <label for="email">Email</label>: <input type="text" id="email" name="email" autofocus="autofocus" /> <br />
+        <label for="password">Password</label>: <input type="password" id="password" name="password" /> <br />
+        <input type="submit" value="Log in" />
+    </form>
+
+</div>
+
+</body>
+</html>
