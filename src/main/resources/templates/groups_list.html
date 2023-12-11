@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Groups List</title>
+    <link th:href="@{/group_list.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+    <div class="box">
+        <h1>Groups List</h1><br>
+
+        <div class="list-container">
+            <ul th:each="group : ${groupsCollection}">
+                <li class="list-item">
+                    <span class="item-text" th:text="${group.groupName}"></span>
+                    <div class="button-container">
+                        <a th:href="@{'/group/edit/' + ${group.idGroup}}" class="item-button">Edit</a><br>
+                        <a th:href="@{'/group/delete/' + ${group.idGroup}}" class="item-button">Delete</a><br>
+                    </div>
+                </li>
+            </ul>
+        </div><br>
+
+        <div class="box-buttons">
+            <a th:href="@{/group/create}" class="item-button">Create Group</a>
+            <a th:href="@{/signout}" class="item-button">Sign Out</a>
+        </div>
+    </div>
+</body>
+</html>
