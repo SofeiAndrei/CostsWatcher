@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CostswatcherApplication {
+public class CostsWatcherApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CostswatcherApplication.class, args);
+        SpringApplication.run(CostsWatcherApplication.class, args);
     }
 }

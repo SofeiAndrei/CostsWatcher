@@ -7,11 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController
-@RequestMapping(path = "api/v1/group")
+@Controller
 public class GroupController {
-
     private final GroupService groupService;
 
     @Autowired
@@ -19,23 +18,48 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping
-    public List<Groups> getGroups(){
-        return groupService.getGroups();
+    @GetMapping("/groups")
+    public String getGroupsForMember(Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        model.addAttribute("groupsCollection", groupService.findAllForUser(UserEntity.signedInUser.getIdUser()));
+        return "groups_list";
     }
 
-    @PostMapping
-    public void createNewGroup(@RequestBody Groups group) {
-        groupService.createNewGroup(group);
+    @GetMapping("/group/create")
+    public String createGroupPage(Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        model.addAttribute("groupEntity", new GroupEntity());
+        return "create_group_form";
     }
 
-    @DeleteMapping(path = "{groupId}")
-    public void deleteGroup(@PathVariable("groupId") Integer groupId){
+    @PostMapping("/group/create/submit")
+    public String createGroup(@ModelAttribute("groupEntity") GroupEntity newGroup, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        groupService.createNewGroup(newGroup);
+        return "redirect:/groups";
+    }
+
+    @GetMapping("/group/edit/{id}")
+    public String editGroup(@PathVariable("id") int groupId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        Optional<GroupEntity> group = groupService.getGroupById(groupId);
+        if (group.isPresent()) {
+            model.addAttribute("group", group.get());
+            model.addAttribute("membersCollection", groupService.getAllGroupMembers(groupId));
+            return "edit_group";
+        }
+        return "redirect:/groups";
+    }
+
+    @GetMapping("/group/delete/{id}")
+    public String deleteGroup(@PathVariable("id") int groupId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
         groupService.deleteGroup(groupId);
-    }
-
-    @PutMapping("/{groupId}")
-    public void updateGroupName(@PathVariable("groupId") Integer groupId, @RequestBody Groups updatedGroup) {
-        groupService.updateGroupName(groupId, updatedGroup.getGroupName());
+        return "redirect:/groups";
     }
 }

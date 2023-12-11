@@ -16,7 +16,6 @@ public class GroupMemberId implements Serializable {
     }
 
     public GroupMemberId() {
-
     }
 
     @Override

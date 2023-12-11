@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table
-public class Groups {
+public class GroupEntity {
     @Id
     @SequenceGenerator(
             name = "group_sequence",
@@ -18,14 +18,14 @@ public class Groups {
     private Integer idGroup;
     private String groupName;
 
-    public Groups() {
+    public GroupEntity() {
     }
-    public Groups(Integer idGroup, String groupName) {
+    public GroupEntity(Integer idGroup, String groupName) {
         this.idGroup = idGroup;
         this.groupName = groupName;
     }
 
-    public Groups(String groupName) {
+    public GroupEntity(String groupName) {
         this.groupName = groupName;
     }
 

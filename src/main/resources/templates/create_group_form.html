@@ -17,9 +17,9 @@
         </div>
     </form>
 
-    <div class="box-buttons">
-        <a th:href="@{/groups}" class="item-button">Back</a>
-    </div>
+    <form th:action="@{/groups}" method="get">
+        <button type="submit">Back</button>
+    </form>
 </div>
 </body>
 </html>

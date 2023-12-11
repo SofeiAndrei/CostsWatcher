@@ -1,6 +1,5 @@
 package com.costswatcher.costswatcher.group;
 
-import com.costswatcher.costswatcher.constants.ConstantsUsers;
 import com.costswatcher.costswatcher.user.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -21,18 +20,14 @@ public class GroupService {
         this.groupMemberService = groupMemberService;
     }
 
-    public List<Groups> findAllForUser(int idUser) {
+    public List<GroupEntity> findAllForUser(int idUser) {
         return groupRepository.findAllForUser(idUser);
     }
 
-    public List<Groups> getGroups(){
-        return groupRepository.findAll();
-    }
+    public Optional<GroupEntity> getGroupById(int groupId) { return groupRepository.findById(groupId); }
 
-    public Optional<Groups> getGroupById(int groupId) { return groupRepository.findById(groupId); }
-
-    public void createNewGroup(Groups group) {
-        Groups savedGroup = groupRepository.save(group);
+    public void createNewGroup(GroupEntity group) {
+        GroupEntity savedGroup = groupRepository.save(group);
         GroupMember firstMember = new GroupMember(new GroupMemberId(UserEntity.signedInUser.getIdUser(), savedGroup.getIdGroup()), false);
         groupMemberService.addNewGroupMember(firstMember);
     }
@@ -40,14 +35,6 @@ public class GroupService {
     public void deleteGroup(Integer groupId) {
         groupMemberService.removeGroupMemberByGroupId(groupId);
         groupRepository.deleteById(groupId);
-    }
-
-    public void updateGroupName(Integer groupId, String newGroupName) {
-        Groups groupToUpdate = groupRepository.findById(groupId)
-                .orElseThrow(() -> new EntityNotFoundException("Group not found with id: " + groupId));
-
-        groupToUpdate.setGroupName(newGroupName);
-        groupRepository.save(groupToUpdate);
     }
 
     public List<UserEntity> getAllGroupMembers(int idGroup) {

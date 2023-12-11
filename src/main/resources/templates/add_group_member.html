@@ -17,9 +17,9 @@
         </div>
     </form>
 
-    <div class="box-buttons">
-        <a th:href="@{'/group/edit/' + ${groupId}}" class="item-button">Back</a>
-    </div>
+    <form th:action="@{'/group/edit/' + ${groupId}}" method="get">
+        <button type="submit">Back</button>
+    </form>
 
     <h3 th:text="${invalidUsername}"></h3>
 </div>

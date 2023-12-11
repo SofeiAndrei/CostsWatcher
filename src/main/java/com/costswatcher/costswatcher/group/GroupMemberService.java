@@ -21,12 +21,8 @@ public class GroupMemberService {
         this.userRepository = userRepository;
     }
 
-    public List<GroupMember> getGroupMembers() {
-        return groupMemberRepository.findAll();
-    }
-
     public void addNewGroupMember(GroupMember groupMember) {
-        Optional<Groups> groupsOptional = groupRepository.findGroupsByIdGroup(groupMember.getId().getIdGroup());
+        Optional<GroupEntity> groupsOptional = groupRepository.findGroupsByIdGroup(groupMember.getId().getIdGroup());
         Optional<GroupMember> groupMemberOptional = groupMemberRepository.findGroupMemberById(groupMember.getId());
         // Need to check if user exists
         if (groupsOptional.isPresent() && groupMemberOptional.isEmpty()) {
@@ -56,5 +52,4 @@ public class GroupMemberService {
         Optional<GroupMember> member = groupMemberRepository.findGroupMemberById(new GroupMemberId(user.get().getIdUser(), groupId));
         return member.isPresent();
     }
-
 }
