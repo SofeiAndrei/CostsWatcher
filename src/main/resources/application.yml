@@ -2,11 +2,11 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/costswatcher?currentSchema=public
     username: postgres
-    password: andrei16
+    password: admin
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create # the first time you should replace "validate" with "create" so it makes the schema and then leave is a "validate"
+      ddl-auto: validate # the first time you should replace "validate" with "create" so it makes the schema and then leave is a "validate"
     show-sql: false
     properties:
       hibernate:
@@ -23,4 +23,4 @@ application:
         expiration: 604800000 # 7 days
 
 server:
-  port: 4000
+  port: 8080

@@ -1,35 +1,41 @@
 package com.costswatcher.costswatcher.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
+    UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository repository;
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+    public boolean signUpUser(UserEntity user) {
+        boolean userExists = userRepository.existsByUsername(user.getUsername());
+        if (!userExists)
+            userRepository.save(user);
+        return !userExists;
+    }
 
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
-        }
+    public boolean signInUser(UserEntity user) {
+        Optional<UserEntity> foundUser = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+        foundUser.ifPresent(value -> UserEntity.signedInUser = value);
+        return foundUser.isPresent();
+    }
 
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+    public void signOutUser() {
+        UserEntity.signedInUser = null;
+    }
 
-        // save the new password
-        repository.save(user);
+    public boolean checkIfUserExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public Optional<UserEntity> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
