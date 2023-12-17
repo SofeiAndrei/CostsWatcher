@@ -1,5 +1,7 @@
 package com.costswatcher.costswatcher.group;
 
+import com.costswatcher.costswatcher.expense.IndividualExpenseRepository;
+import com.costswatcher.costswatcher.expense.IndividualExpenseService;
 import com.costswatcher.costswatcher.user.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -13,11 +15,13 @@ import java.util.Optional;
 public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMemberService groupMemberService;
+    private final IndividualExpenseService individualExpenseService;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, GroupMemberService groupMemberService) {
+    public GroupService(GroupRepository groupRepository, GroupMemberService groupMemberService, IndividualExpenseService individualExpenseService) {
         this.groupRepository = groupRepository;
         this.groupMemberService = groupMemberService;
+        this.individualExpenseService = individualExpenseService;
     }
 
     public List<GroupEntity> findAllForUser(int idUser) {
@@ -33,6 +37,7 @@ public class GroupService {
     }
     @Transactional
     public void deleteGroup(Integer groupId) {
+        individualExpenseService.deleteAllByIdGroup(groupId);
         groupMemberService.removeGroupMemberByGroupId(groupId);
         groupRepository.deleteById(groupId);
     }

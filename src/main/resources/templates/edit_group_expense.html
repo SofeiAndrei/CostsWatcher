@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Group Expense</title>
+    <link th:href="@{/edit_group_expense.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+<div class="box">
+    <h1>Edit group expense</h1><br>
+
+    <form th:object="${expenseEntity}" th:action="@{'/group/'+ *{idGroup} +'/edit/group-expense/' + *{idExpense} + '/submit'}" method="post">
+        <div class="container">
+            <label for="ename"><b>Expense name</b></label>
+            <div class="horizontal-list">
+                <input type="text" placeholder="Enter expense name" id="ename" minlength="3" maxlength="40" th:field="*{name}" required>
+                <button type="submit" id="save-name">Save</button>
+            </div>
+            <label for="date"><b>Date</b></label>
+            <input type="datetime-local" id="date" th:value="*{date}" disabled>
+            <div class="horizontal-list" th:each="member : ${participants}">
+                <label for="uname"><b>Group member</b></label>
+                <input type="text" id="uname" th:value="${member.get(0)}" disabled>
+                <label for="amount"><b>Amount ($)</b></label>
+                <input type="number" id="amount" th:value="${member.get(2)}" disabled>
+                <a th:href="@{'/group/'+ *{idGroup} +'/edit/group-expense/' + *{idExpense} + '/delete-member/' + ${member.get(1)}}" class="item-button">Delete</a>
+            </div>
+        </div>
+    </form>
+
+    <form th:action="@{'/group/'+ *{groupId} +'/edit/group-expense/' + ${expenseId} + '/add-member'}" method="get">
+        <button type="submit">Add participant</button>
+    </form>
+
+    <form th:action="@{'/group/edit/' + ${groupId}}" method="get">
+        <button type="submit">Back</button>
+    </form>
+
+    <h3 th:text="${invalidFormData}"></h3>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Group Expense</title>
+    <link th:href="@{/add_group_expense.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+<div class="box">
+    <h1>Add group expense</h1><br>
+
+    <form th:object="${formData}" th:action="@{'/group/'+ ${groupId} +'/add/group-expense/submit'}" method="post">
+        <div class="container">
+            <label for="ename"><b>Name of the expense</b></label>
+            <input type="text" placeholder="Enter expense name" id="ename" minlength="3" maxlength="40" th:field="*{expenseName}" required>
+            <label for="m1name"><b>First member's name</b></label>
+            <input type="text" placeholder="Enter username" id="m1name" minlength="3" maxlength="40" th:field="*{username1}" required>
+            <label for="amount1"><b>First member's amount ($)</b></label>
+            <input type="number" placeholder="Enter the amount" id="amount1" min="1" th:field="*{amount1}" required>
+            <label for="m2name"><b>Second member's name</b></label>
+            <input type="text" placeholder="Enter username" id="m2name" minlength="3" maxlength="40" th:field="*{username2}" required>
+            <label for="amount2"><b>Second member's amount ($)</b></label>
+            <input type="number" placeholder="Enter the amount" id="amount2" min="1" th:field="*{amount2}" required>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+
+    <form th:action="@{'/group/edit/' + ${groupId}}" method="get">
+        <button type="submit">Back</button>
+    </form>
+
+    <h3 th:text="${invalidFormData}"></h3>
+</div>
+</body>
+</html>

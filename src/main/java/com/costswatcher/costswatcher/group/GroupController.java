@@ -1,5 +1,7 @@
 package com.costswatcher.costswatcher.group;
 
+import com.costswatcher.costswatcher.expense.GroupExpenseService;
+import com.costswatcher.costswatcher.expense.IndividualExpenseService;
 import com.costswatcher.costswatcher.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +14,14 @@ import java.util.Optional;
 @Controller
 public class GroupController {
     private final GroupService groupService;
+    private final IndividualExpenseService individualExpenseService;
+    private final GroupExpenseService groupExpenseService;
 
     @Autowired
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, IndividualExpenseService individualExpenseService, GroupExpenseService groupExpenseService) {
         this.groupService = groupService;
+        this.individualExpenseService = individualExpenseService;
+        this.groupExpenseService = groupExpenseService;
     }
 
     @GetMapping("/groups")
@@ -50,6 +56,8 @@ public class GroupController {
         if (group.isPresent()) {
             model.addAttribute("group", group.get());
             model.addAttribute("membersCollection", groupService.getAllGroupMembers(groupId));
+            model.addAttribute("individualExpenses", individualExpenseService.getAllIndividualExpenses(groupId));
+            model.addAttribute("groupExpenses", groupExpenseService.getAllGroupExpenses(groupId));
             return "edit_group";
         }
         return "redirect:/groups";

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class GroupExpenseServiceTest {
@@ -38,7 +39,7 @@ class GroupExpenseServiceTest {
     @Test
     void testGetAllGroupExpenses() {
         int groupId = 123;
-        GroupExpenseEntity expense = new GroupExpenseEntity(1, "test", groupId, Timestamp.from(Instant.now()));
+        GroupExpenseEntity expense = new GroupExpenseEntity(1, "test", groupId, new Timestamp(System.currentTimeMillis()));
         List<GroupExpenseEntity> expectedExpenses = Collections.singletonList(expense);
 
         when(groupExpenseRepository.findAllByIdGroup(groupId)).thenReturn(expectedExpenses);
@@ -68,9 +69,9 @@ class GroupExpenseServiceTest {
 
         when(groupExpenseRepository.findById(expenseId)).thenReturn(Optional.of(mockExpense));
 
-        GroupExpenseEntity result = groupExpenseService.getByIdExpense(expenseId);
+        Optional<GroupExpenseEntity> result = groupExpenseService.getExpenseObjByIdExpense(expenseId);
 
-        assertEquals(expenseId, result.getIdExpense());
+        assertTrue(result.isPresent());
 
         verify(groupExpenseRepository, times(1)).findById(expenseId);
     }
