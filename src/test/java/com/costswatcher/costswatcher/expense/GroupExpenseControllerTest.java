@@ -1,13 +1,17 @@
 package com.costswatcher.costswatcher.expense;
 
 import com.costswatcher.costswatcher.user.UserEntity;
+import jakarta.persistence.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -57,18 +61,22 @@ class GroupExpenseControllerTest {
         int idGroup = 123;
         int idExpense = 456;
         Model model = mock(Model.class);
-        GroupExpenseEntity mockExpense = new GroupExpenseEntity();
+        Optional<GroupExpenseEntity> mockExpense = Optional.of(new GroupExpenseEntity());
+        List<Tuple> mockParticipants = new ArrayList<>();
 
-        when(groupExpenseService.getByIdExpense(idExpense)).thenReturn(mockExpense);
+        when(groupExpenseService.getExpenseObjByIdExpense(idExpense)).thenReturn(mockExpense);
+        when(groupExpenseService.getExpenseParticipants(idExpense)).thenReturn(mockParticipants);
 
+        UserEntity.signedInUser = new UserEntity();
         String viewName = groupExpenseController.editGroupExpense(idGroup, idExpense, model);
 
         assertEquals("edit_group_expense", viewName);
 
-        verify(groupExpenseService, times(1)).getByIdExpense(idExpense);
-        verify(model, times(1)).addAttribute("expenseEntity", mockExpense);
-        verify(model, times(1)).addAttribute("idGroup", idGroup);
-        verify(model, times(1)).addAttribute("idExpense", idExpense);
+        verify(groupExpenseService, times(1)).getExpenseObjByIdExpense(idExpense);
+        verify(model, times(1)).addAttribute("expenseEntity", mockExpense.get());
+        verify(model, times(1)).addAttribute("groupId", idGroup);
+        verify(model, times(1)).addAttribute("expenseId", idExpense);
+        verify(model, times(1)).addAttribute("participants", mockParticipants);
     }
 
     @Test
@@ -77,39 +85,43 @@ class GroupExpenseControllerTest {
         GroupExpenseController groupExpenseController = new GroupExpenseController(groupExpenseService);
 
         Model model = mock(Model.class);
-        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        String result = groupExpenseController.addGroupExpense(model, redirectAttributes);
+        UserEntity.signedInUser = new UserEntity();
+        String result = groupExpenseController.addGroupExpense(1, model);
 
         assertEquals("add_group_expense", result);
     }
 
     @Test
-    void testDeleteMember() {
+    void testDeleteExpenseParticipant() {
         GroupExpenseService groupExpenseService = mock(GroupExpenseService.class);
         GroupExpenseController groupExpenseController = new GroupExpenseController(groupExpenseService);
 
         Model model = mock(Model.class);
 
-        int memberId = 123;
+        int groupId = 321;
+        int expenseId = 111;
+        int userId = 123;
 
-        String result = groupExpenseController.deleteMember(memberId, model);
+        UserEntity.signedInUser = new UserEntity();
+        String result = groupExpenseController.deleteExpenseParticipant(groupId, expenseId, userId, model);
 
-        assertEquals("redirect:/group/members", result);
+        assertEquals("redirect:/group/"+ groupId + "/edit/group-expense/" + expenseId, result);
     }
 
     @Test
-    void testAddMemberToGroupExpense() {
+    void testAddParticipantToGroupExpense() {
         GroupExpenseService groupExpenseService = mock(GroupExpenseService.class);
         GroupExpenseController groupExpenseController = new GroupExpenseController(groupExpenseService);
 
         Model model = mock(Model.class);
 
-        int memberId = 123;
+        int expenseId = 123;
         int groupId = 456;
 
-        String result = groupExpenseController.addMemberToGroupExpense(memberId, groupId, model);
+        UserEntity.signedInUser = new UserEntity();
+        String result = groupExpenseController.addExpenseParticipant(groupId, expenseId, model);
 
-        assertEquals("redirect:/group/edit/" + groupId, result);
+        assertEquals("add_group_expense_participant", result);
     }
 }

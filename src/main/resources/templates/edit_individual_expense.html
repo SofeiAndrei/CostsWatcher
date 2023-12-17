@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Individual Expense</title>
+    <link th:href="@{/edit_individual_expense.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+<div class="box">
+    <h1>Edit individual expense</h1><br>
+
+    <form th:object="${expenseEntity}" th:action="@{'/group/'+ ${groupId} +'/edit/individual-expense/' + *{idExpense} + '/submit'}" method="post">
+        <div class="container">
+            <label for="uname"><b>Added by</b></label>
+            <input type="text" id="uname" th:value="${username}" disabled>
+            <label for="date"><b>Date</b></label>
+            <input type="datetime-local" id="date" th:field="*{date}" disabled>
+            <label for="ename"><b>Expense name</b></label>
+            <input type="text" placeholder="Enter expense name" id="ename" minlength="3" maxlength="40" th:field="*{name}" required>
+            <label for="amount"><b>Expense amount ($)</b></label>
+            <input type="number" placeholder="Enter expense amount" id="amount" min="1" th:field="*{amount}" required>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+
+    <form th:action="@{'/group/edit/' + ${groupId}}" method="get">
+        <button type="submit">Back</button>
+    </form>
+
+    <h3 th:text="${invalidFormData}"></h3>
+</div>
+</body>
+</html>

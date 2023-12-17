@@ -38,4 +38,8 @@ public class UserService {
     public Optional<UserEntity> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public Optional<UserEntity> getUserByIdUser(int idUser) {
+        return userRepository.findById(idUser);
+    }
 }
