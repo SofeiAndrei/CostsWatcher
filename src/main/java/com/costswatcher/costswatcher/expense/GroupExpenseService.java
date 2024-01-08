@@ -91,9 +91,11 @@ public class GroupExpenseService {
     }
 
     public String addGroupExpense(String expenseName, int idGroup, List<Pair<String, Integer>> participants) {
-        Optional<GroupEntity> groupSearchResult = groupService.getGroupById(idGroup);
-        if (groupSearchResult.isEmpty())
-            return "There is no group with the given ID";
+        Optional<GroupEntity> groupSearchResult = null;
+        if (groupService != null)
+            groupSearchResult = groupService.getGroupById(idGroup);
+            if (groupSearchResult == null || groupSearchResult.isEmpty())
+                return "There is no group with the given ID";
 
         for (Pair<String, Integer> member : participants)
             if (!groupMemberService.checkIfGroupHasMember(idGroup, member.getFirst()))

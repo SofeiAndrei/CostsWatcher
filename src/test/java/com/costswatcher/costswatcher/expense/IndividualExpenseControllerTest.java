@@ -68,7 +68,6 @@ public class IndividualExpenseControllerTest {
     @Test
     public void testSubmitEditedIndividualExpense() throws Exception {
         UserEntity.signedInUser = new UserEntity();
-
         int groupId = 123;
         int expenseId = 456;
 
@@ -94,6 +93,25 @@ public class IndividualExpenseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("edit_individual_expense"))
                 .andExpect(model().attributeExists("invalidFormData"));
+
+        formExpense.setName("A");
+        formExpense.setAmount(10);
+
+        mockMvc.perform(post("/group/{groupId}/edit/individual-expense/{expenseId}/submit", groupId, expenseId)
+                        .flashAttr("formExpense", formExpense))
+                .andExpect(status().isOk())
+                .andExpect(view().name("edit_individual_expense"))
+                .andExpect(model().attributeExists("invalidFormData"));
+
+        formExpense.setName("AaaaaaaaaaAaaaaaaaaaAaaaaaaaaaAaaaaaaaaaA");
+        formExpense.setAmount(10);
+
+        mockMvc.perform(post("/group/{groupId}/edit/individual-expense/{expenseId}/submit", groupId, expenseId)
+                        .flashAttr("formExpense", formExpense))
+                .andExpect(status().isOk())
+                .andExpect(view().name("edit_individual_expense"))
+                .andExpect(model().attributeExists("invalidFormData"));
+
     }
 
     @Test
@@ -127,5 +145,63 @@ public class IndividualExpenseControllerTest {
                 .andExpect(redirectedUrl("/group/edit/" + groupId));
     }
 
+    @Test
+    public void testNotSignedInRedirects() throws Exception {
+        UserEntity.signedInUser = null;
+
+        mockMvc.perform(get("/group/{groupId}/add/individual-expense", 123))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        mockMvc.perform(get("/group/{groupId}/edit/individual-expense/{expenseId}", 123, 456))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        mockMvc.perform(get("/group/{groupId}/delete/individual-expense/{expenseId}", 123, 456))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        mockMvc.perform(post("/group/{groupId}/add/individual-expense/submit", 123))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+        mockMvc.perform(post("/group/{groupId}/edit/individual-expense/{expenseId}/submit", 123, 456))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+    }
+
+    @Test
+    public void testSubmitNewIndividualExpenseWithInvalidData() throws Exception {
+        UserEntity.signedInUser = new UserEntity();
+
+        int groupId = 123;
+
+        IndividualExpenseEntity formExpense = new IndividualExpenseEntity();
+        formExpense.setName("TestName");
+        formExpense.setAmount(0);
+
+        mockMvc.perform(post("/group/{groupId}/add/individual-expense/submit", groupId)
+                        .flashAttr("expenseEntity", formExpense))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_individual_expense"))
+                .andExpect(model().attributeExists("invalidFormData"));
+
+        formExpense.setName("A");
+        formExpense.setAmount(1);
+
+        mockMvc.perform(post("/group/{groupId}/add/individual-expense/submit", groupId)
+                        .flashAttr("expenseEntity", formExpense))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_individual_expense"))
+                .andExpect(model().attributeExists("invalidFormData"));
+
+        formExpense.setName("AaaaaaaaaaAaaaaaaaaaAaaaaaaaaaAaaaaaaaaaA");
+        formExpense.setAmount(1);
+
+        mockMvc.perform(post("/group/{groupId}/add/individual-expense/submit", groupId)
+                        .flashAttr("expenseEntity", formExpense))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add_individual_expense"))
+                .andExpect(model().attributeExists("invalidFormData"));
+    }
 }
 
