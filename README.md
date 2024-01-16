@@ -1,5 +1,8 @@
 # CostsWatcher
 
+Documentation:
+https://docs.google.com/document/d/1jBZ-FXD4iQhlAW4ZUtjva9CoFuVaYNzRLQ0YJ-X1Hmc/edit
+
 Database:
 1. Download PostgreSQL server
 2. Add bin path to PATH
