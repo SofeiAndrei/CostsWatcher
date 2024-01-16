@@ -1,7 +1,10 @@
 # CostsWatcher
 
 Documentation:
-https://docs.google.com/document/d/1jBZ-FXD4iQhlAW4ZUtjva9CoFuVaYNzRLQ0YJ-X1Hmc/edit
+https://github.com/SofeiAndrei/CostsWatcher/blob/main/CostsWatcherDocumentation.pdf
+
+Diagrams:
+https://github.com/SofeiAndrei/CostsWatcher/tree/main/diagrams
 
 Database:
 1. Download PostgreSQL server
