@@ -1,5 +1,6 @@
 package com.costswatcher.costswatcher.group;
 
+import com.costswatcher.costswatcher.user.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,9 @@ public class GroupEntity {
     )
     private Integer idGroup;
     private String groupName;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity organizer;
 
     public GroupEntity() {
     }
@@ -51,5 +55,13 @@ public class GroupEntity {
                 "idGroup=" + idGroup +
                 ", groupName='" + groupName + '\'' +
                 '}';
+    }
+
+    public UserEntity getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(UserEntity organizer) {
+        this.organizer = organizer;
     }
 }

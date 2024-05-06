@@ -59,6 +59,11 @@
     justify-content: center;
 }
 
+.member-list-entry {
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+
 .item-text {
     font-size: 18px;
     margin-left: 10px;

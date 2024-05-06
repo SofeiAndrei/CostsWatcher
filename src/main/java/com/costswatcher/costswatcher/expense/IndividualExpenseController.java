@@ -21,6 +21,18 @@ public class IndividualExpenseController {
         this.userService = userService;
     }
 
+    @GetMapping("/group/{groupId}/show/individual-expense/{expenseId}")
+    public String showIndividualExpense(@PathVariable("groupId") int groupId, @PathVariable("expenseId") int expenseId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        model.addAttribute("groupId", groupId);
+        IndividualExpenseEntity expenseEntity = individualExpenseService.getByIdExpense(expenseId);
+        model.addAttribute("expenseEntity", expenseEntity);
+        UserEntity user = userService.getUserByIdUser(expenseEntity.getIdUser()).orElse(null);
+        model.addAttribute("username", user != null ? user.getUsername() : "");
+        return "show_individual_expense";
+    }
+
     @GetMapping("/group/{groupId}/delete/individual-expense/{expenseId}")
     public String deleteIndividualExpense(@PathVariable("groupId") int groupId, @PathVariable("expenseId") int expenseId, Model model) {
         if (UserEntity.signedInUser == null)

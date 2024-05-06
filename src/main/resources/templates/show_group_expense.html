@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Group Expense</title>
+    <link th:href="@{/show_group_expense.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+<div class="box">
+    <h1>Show group expense</h1><br>
+
+    <form th:object="${expenseEntity}">
+        <div class="container">
+            <label for="ename"><b>Expense name</b></label>
+            <div class="horizontal-list">
+                <input type="text" placeholder="Enter expense name" id="ename" minlength="3" maxlength="40" th:field="*{name}" disabled>
+            </div>
+            <label for="date"><b>Date</b></label>
+            <input type="datetime-local" id="date" th:value="*{date}" disabled>
+            <div class="horizontal-list" th:each="member : ${participants}">
+                <label for="uname"><b>Group member</b></label>
+                <input type="text" id="uname" th:value="${member.get(0)}" disabled>
+                <label for="amount"><b>Amount ($)</b></label>
+                <input type="number" id="amount" th:value="${member.get(2)}" disabled>
+            </div>
+        </div>
+    </form>
+
+    <form th:action="@{'/group/edit/' + ${groupId}}" method="get">
+        <button type="submit">Back</button>
+    </form>
+</div>
+</body>
+</html>

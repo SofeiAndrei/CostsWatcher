@@ -52,6 +52,14 @@ public class GroupMemberController {
         return "redirect:/groups";
     }
 
+    @GetMapping("/group/{gId}/delete/member/{mId}")
+    public String deleteGroupMember(@PathVariable("gId") int groupId, @PathVariable("mId") int memberId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        groupMemberService.removeGroupMember(new GroupMemberId(memberId, groupId));
+        return "redirect:/group/edit/" + groupId;
+    }
+
     @GetMapping("/group/{id}/leave")
     public String leaveGroup(@PathVariable("id") int groupId, Model model) {
         if (UserEntity.signedInUser == null)

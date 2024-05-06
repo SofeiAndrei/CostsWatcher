@@ -14,8 +14,8 @@
                 <li class="list-item">
                     <span class="item-text" th:text="${group.groupName}"></span>
                     <div class="button-container">
+                        <a th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser()}" th:href="@{'/group/delete/' + ${group.idGroup}}" class="item-button">Delete</a><br>
                         <a th:href="@{'/group/edit/' + ${group.idGroup}}" class="item-button">Edit</a><br>
-                        <a th:href="@{'/group/delete/' + ${group.idGroup}}" class="item-button">Delete</a><br>
                     </div>
                 </li>
             </ul>

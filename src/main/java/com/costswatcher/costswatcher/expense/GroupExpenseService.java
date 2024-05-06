@@ -12,7 +12,9 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,6 +40,24 @@ public class GroupExpenseService {
 
     public List<GroupExpenseEntity> getAllGroupExpenses(int idGroup) {
         return grExpRepository.findAllByIdGroup(idGroup);
+    }
+
+    public Map<Integer, Boolean> getIsExpenseParticipantMap(int idUser, int idGroup) {
+        Map<Integer, Boolean> result = new HashMap<>();
+        List<GroupExpenseEntity> expenses = this.getAllGroupExpenses(idGroup);
+        for (GroupExpenseEntity expense : expenses) {
+            List<Tuple> participants = this.getExpenseParticipants(expense.getIdExpense());
+            for (Tuple participant : participants) {
+                if (participant.get(1).toString().equals(String.valueOf(idUser))) {
+                    result.put(expense.getIdExpense(), true);
+                    break;
+                }
+            }
+            if (!result.containsKey(expense.getIdExpense())) {
+                result.put(expense.getIdExpense(), false);
+            }
+        }
+        return result;
     }
 
     @Transactional

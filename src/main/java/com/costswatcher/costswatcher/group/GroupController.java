@@ -28,6 +28,7 @@ public class GroupController {
     public String getGroupsForMember(Model model) {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
+        model.addAttribute("signedInUser", UserEntity.signedInUser);
         model.addAttribute("groupsCollection", groupService.findAllForUser(UserEntity.signedInUser.getIdUser()));
         return "groups_list";
     }
@@ -44,6 +45,7 @@ public class GroupController {
     public String createGroup(@ModelAttribute("groupEntity") GroupEntity newGroup, Model model) {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
+        newGroup.setOrganizer(UserEntity.signedInUser);
         groupService.createNewGroup(newGroup);
         return "redirect:/groups";
     }
@@ -54,10 +56,12 @@ public class GroupController {
             return "redirect:/";
         Optional<GroupEntity> group = groupService.getGroupById(groupId);
         if (group.isPresent()) {
+            model.addAttribute("signedInUser", UserEntity.signedInUser);
             model.addAttribute("group", group.get());
             model.addAttribute("membersCollection", groupService.getAllGroupMembers(groupId));
             model.addAttribute("individualExpenses", individualExpenseService.getAllIndividualExpenses(groupId));
             model.addAttribute("groupExpenses", groupExpenseService.getAllGroupExpenses(groupId));
+            model.addAttribute("isParticipantMap", groupExpenseService.getIsExpenseParticipantMap(UserEntity.signedInUser.getIdUser(), groupId));
             return "edit_group";
         }
         return "redirect:/groups";

@@ -1,0 +1,65 @@
+input[type=text], input[type=password], input[type=number], input[type=datetime-local] {
+    width: 100%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin: 8px 20px 8px 0;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button[id="save-name"] {
+    width: 70px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+form {
+    width: 100%;
+}
+
+.item-button {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+    text-decoration: none;
+}
+
+.horizontal-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.horizontal-list input:not([id="ename"]) {
+    margin: 8px 20px;
+}

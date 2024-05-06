@@ -36,6 +36,21 @@ public class GroupExpenseController {
         return "redirect:/group/edit/" + idGroup;
     }
 
+    @GetMapping("/group/{idGroup}/show/group-expense/{idExpense}")
+    public String showGroupExpense(
+            @PathVariable("idGroup") int idGroup,
+            @PathVariable("idExpense") int idExpense,
+            Model model
+    ) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        model.addAttribute("groupId", idGroup);
+        model.addAttribute("expenseId", idExpense);
+        model.addAttribute("expenseEntity", groupExpenseService.getExpenseObjByIdExpense(idExpense).orElse(new GroupExpenseEntity()));
+        model.addAttribute("participants", groupExpenseService.getExpenseParticipants(idExpense));
+        return "show_group_expense";
+    }
+
     @GetMapping("/group/{idGroup}/edit/group-expense/{idExpense}")
     public String editGroupExpense(
             @PathVariable("idGroup") int idGroup,
