@@ -6,6 +6,10 @@ import com.costswatcher.costswatcher.user.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +28,10 @@ public class GroupService {
         this.individualExpenseService = individualExpenseService;
     }
 
-    public List<GroupEntity> findAllForUser(int idUser) {
-        return groupRepository.findAllForUser(idUser);
+    public Page<GroupEntity> findAllForUser(int idUser, int pageIndex) {
+        final int PAGE_SIZE = 7;
+        Pageable pageQuery = PageRequest.of(pageIndex, PAGE_SIZE);
+        return groupRepository.findAllForUser(idUser, pageQuery);
     }
 
     public Optional<GroupEntity> getGroupById(int groupId) { return groupRepository.findById(groupId); }

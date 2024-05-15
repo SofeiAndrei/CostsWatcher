@@ -49,7 +49,7 @@ public class GroupMemberController {
         }
         int userId = userService.getUserByUsername(newMember.getUsername()).get().getIdUser();
         groupMemberService.addNewGroupMember(new GroupMember(new GroupMemberId(userId, groupId), false));
-        return "redirect:/groups";
+        return "redirect:/group/edit/" + groupId + "/members";
     }
 
     @GetMapping("/group/{gId}/delete/member/{mId}")
@@ -57,7 +57,7 @@ public class GroupMemberController {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
         groupMemberService.removeGroupMember(new GroupMemberId(memberId, groupId));
-        return "redirect:/group/edit/" + groupId;
+        return "redirect:/group/edit/" + groupId + "/members";
     }
 
     @GetMapping("/group/{id}/leave")

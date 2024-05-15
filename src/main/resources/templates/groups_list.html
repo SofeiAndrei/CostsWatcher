@@ -6,19 +6,35 @@
     <link th:href="@{/group_list.css}" rel="stylesheet" />
 </head>
 <body style="background-color: #FEFCE7;">
+    <nav class="navbar">
+        <div class="navbar-brand">CostsWatcher</div>
+    </nav>
+
     <div class="box">
-        <h1>Groups List</h1><br>
+        <h1 id="page-header">Groups List</h1><br>
 
         <div class="list-container">
+            <img th:if="${groupsCollection.isEmpty()}" th:src="@{/images/empty_list.png}" id="empty-image"/>
             <ul th:each="group : ${groupsCollection}">
                 <li class="list-item">
                     <span class="item-text" th:text="${group.groupName}"></span>
                     <div class="button-container">
                         <a th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser()}" th:href="@{'/group/delete/' + ${group.idGroup}}" class="item-button">Delete</a><br>
-                        <a th:href="@{'/group/edit/' + ${group.idGroup}}" class="item-button">Edit</a><br>
+                        <a th:href="@{'/group/edit/' + ${group.idGroup} + '/members'}" class="item-button">Edit</a><br>
                     </div>
                 </li>
             </ul>
+            <div th:if="${!groupsCollection.isEmpty()}" class="bottom-navigation">
+                <form th:action="@{/groups}" method="get">
+                    <input type="hidden" name="page" th:value="${prevPageNumber}" />
+                    <button class="prev-page-button" type="submit" th:disabled="${prevPageNumber < 1}"> < </button>
+                </form>
+                <button class="page-number" th:text="${nextPageNumber - 1}" disabled></button>
+                <form th:action="@{/groups}" method="get">
+                    <input type="hidden" name="page" th:value="${nextPageNumber}" />
+                    <button class="next-page-button" type="submit" th:disabled="${nextPageNumber > pagesCount}"> > </button>
+                </form>
+            </div>
         </div><br>
 
         <div class="box-buttons">

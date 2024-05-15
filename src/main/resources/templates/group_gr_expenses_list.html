@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group expenses</title>
+    <link th:href="@{/group_gr_expenses_list.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+
+<nav class="navbar">
+    <div class="navbar-brand">CostsWatcher</div>
+    <ul class="navbar-nav">
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/members'}" class="nav-link">Members</a></li>
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/individual-expenses'}" class="nav-link">Indiv. Expenses</a></li>
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/group-expenses'}" class="nav-link">Group Expenses</a></li>
+        <li class="nav-item"><a th:href="@{/groups}" class="nav-link">Back</a></li>
+        <li th:if="${signedInUser.getIdUser() != group.getOrganizer().getIdUser()}" class="nav-item"><a th:href="@{'/group/'+ ${group.idGroup} +'/leave'}" class="nav-link">Leave Group</a></li>
+    </ul>
+</nav>
+
+<div class="box">
+    <h1 th:text="${group.groupName}"></h1>
+    <h2 th:text="'Organizer: ' + ${group.getOrganizer().getUsername()}"></h2><br>
+
+    <div class="lists">
+        <div class="list-container">
+            <h2>Group Expenses</h2>
+            <img th:if="${groupExpenses.isEmpty()}" th:src="@{/images/empty_list.png}" id="empty-image"/>
+            <ul th:each="expense : ${groupExpenses}">
+                <li class="expenses-list-item">
+                    <span class="item-text" th:text="${expense.name}"></span>
+                    <div th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser() || isParticipantMap[expense.getIdExpense()] == true}" class="item-buttons">
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/edit/group-expense/' + ${expense.idExpense}}" class="item-button">Edit</a>
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/delete/group-expense/' + ${expense.idExpense}}" class="item-button">Delete</a>
+                    </div>
+                    <div th:unless="${signedInUser.getIdUser() == group.getOrganizer().getIdUser() || isParticipantMap[expense.getIdExpense()] == true}" class="item-buttons">
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/show/group-expense/' + ${expense.idExpense}}" class="item-button">Show</a>
+                    </div>
+                </li>
+            </ul>
+            <a th:href="@{'/group/'+ ${group.idGroup} +'/add/group-expense'}" class="item-button">Add Expense</a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

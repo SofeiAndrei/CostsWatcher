@@ -33,7 +33,7 @@ public class GroupExpenseController {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
         groupExpenseService.deleteGroupExpense(idExpense, idGroup);
-        return "redirect:/group/edit/" + idGroup;
+        return "redirect:/group/edit/" + idGroup + "/group-expenses";
     }
 
     @GetMapping("/group/{idGroup}/show/group-expense/{idExpense}")
@@ -91,7 +91,7 @@ public class GroupExpenseController {
         }
 
         groupExpenseService.saveEditedExpenseName(idExpense, formExpense.getName());
-        return "redirect:/group/edit/" + idGroup;
+        return "redirect:/group/edit/" + idGroup + "/group-expenses";
     }
 
     @GetMapping("/group/{idGroup}/edit/group-expense/{idExpense}/delete-member/{idUser}")
@@ -197,6 +197,6 @@ public class GroupExpenseController {
             model.addAttribute("invalidFormData", invalidMessage);
             return "add_group_expense";
         }
-        return "redirect:/group/edit/" + idGroup;
+        return "redirect:/group/edit/" + idGroup + "/group-expenses";
     }
 }

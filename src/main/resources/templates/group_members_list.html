@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Members</title>
+    <link th:href="@{/group_members_list.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+
+<nav class="navbar">
+    <div class="navbar-brand">CostsWatcher</div>
+    <ul class="navbar-nav">
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/members'}" class="nav-link">Members</a></li>
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/individual-expenses'}" class="nav-link">Indiv. Expenses</a></li>
+        <li class="nav-item"><a th:href="@{'/group/edit/' + ${group.idGroup} + '/group-expenses'}" class="nav-link">Group Expenses</a></li>
+        <li class="nav-item"><a th:href="@{/groups}" class="nav-link">Back</a></li>
+        <li th:if="${signedInUser.getIdUser() != group.getOrganizer().getIdUser()}" class="nav-item"><a th:href="@{'/group/'+ ${group.idGroup} +'/leave'}" class="nav-link">Leave Group</a></li>
+    </ul>
+</nav>
+
+<div class="box">
+    <h1 th:text="${group.groupName}"></h1>
+    <h2 th:text="'Organizer: ' + ${group.getOrganizer().getUsername()}"></h2><br>
+
+    <div class="lists">
+        <div class="list-container">
+            <h2>Group Members</h2>
+            <img th:if="${membersCollection.isEmpty()}" th:src="@{/images/empty_list.png}" id="empty-image"/>
+            <ul class="member-list-entry" th:each="member : ${membersCollection}">
+                <li class="members-list-item">
+                    <span class="item-text" th:text="${member.username}"></span>
+                    <div th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser() && member.getIdUser() != signedInUser.getIdUser()}" class="item-buttons">
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/delete/member/' + ${member.getIdUser()}}" class="item-button">Remove</a>
+                    </div>
+                </li>
+            </ul>
+            <a th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser()}" th:href="@{'/group/'+ ${group.idGroup} +'/add/member'}" class="item-button">Add Member</a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

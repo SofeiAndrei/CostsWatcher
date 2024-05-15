@@ -4,6 +4,7 @@ import com.costswatcher.costswatcher.expense.GroupExpenseService;
 import com.costswatcher.costswatcher.expense.IndividualExpenseService;
 import com.costswatcher.costswatcher.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,18 @@ public class GroupController {
     }
 
     @GetMapping("/groups")
-    public String getGroupsForMember(Model model) {
+    public String getGroupsForMember(
+        @RequestParam(name = "page", defaultValue = "1") int pageNumber,
+        Model model
+    ) {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
+        Page<GroupEntity> groupsCollection = groupService.findAllForUser(UserEntity.signedInUser.getIdUser(), pageNumber - 1);
         model.addAttribute("signedInUser", UserEntity.signedInUser);
-        model.addAttribute("groupsCollection", groupService.findAllForUser(UserEntity.signedInUser.getIdUser()));
+        model.addAttribute("groupsCollection", groupsCollection);
+        model.addAttribute("pagesCount", groupsCollection.getTotalPages());
+        model.addAttribute("prevPageNumber", pageNumber - 1);
+        model.addAttribute("nextPageNumber", pageNumber + 1);
         return "groups_list";
     }
 
@@ -50,8 +58,8 @@ public class GroupController {
         return "redirect:/groups";
     }
 
-    @GetMapping("/group/edit/{id}")
-    public String editGroup(@PathVariable("id") int groupId, Model model) {
+    @GetMapping("/group/edit/{id}/members")
+    public String editGroupMembers(@PathVariable("id") int groupId, Model model) {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
         Optional<GroupEntity> group = groupService.getGroupById(groupId);
@@ -59,10 +67,36 @@ public class GroupController {
             model.addAttribute("signedInUser", UserEntity.signedInUser);
             model.addAttribute("group", group.get());
             model.addAttribute("membersCollection", groupService.getAllGroupMembers(groupId));
+            return "group_members_list";
+        }
+        return "redirect:/groups";
+    }
+
+    @GetMapping("/group/edit/{id}/individual-expenses")
+    public String editGroupIndivExpenses(@PathVariable("id") int groupId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        Optional<GroupEntity> group = groupService.getGroupById(groupId);
+        if (group.isPresent()) {
+            model.addAttribute("signedInUser", UserEntity.signedInUser);
+            model.addAttribute("group", group.get());
             model.addAttribute("individualExpenses", individualExpenseService.getAllIndividualExpenses(groupId));
+            return "group_indiv_expenses_list";
+        }
+        return "redirect:/groups";
+    }
+
+    @GetMapping("/group/edit/{id}/group-expenses")
+    public String editGroupGrExpenses(@PathVariable("id") int groupId, Model model) {
+        if (UserEntity.signedInUser == null)
+            return "redirect:/";
+        Optional<GroupEntity> group = groupService.getGroupById(groupId);
+        if (group.isPresent()) {
+            model.addAttribute("signedInUser", UserEntity.signedInUser);
+            model.addAttribute("group", group.get());
             model.addAttribute("groupExpenses", groupExpenseService.getAllGroupExpenses(groupId));
             model.addAttribute("isParticipantMap", groupExpenseService.getIsExpenseParticipantMap(UserEntity.signedInUser.getIdUser(), groupId));
-            return "edit_group";
+            return "group_gr_expenses_list";
         }
         return "redirect:/groups";
     }

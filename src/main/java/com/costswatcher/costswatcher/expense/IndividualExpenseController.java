@@ -38,7 +38,7 @@ public class IndividualExpenseController {
         if (UserEntity.signedInUser == null)
             return "redirect:/";
         individualExpenseService.deleteIndividualExpense(expenseId, groupId);
-        return "redirect:/group/edit/" + groupId;
+        return "redirect:/group/edit/" + groupId + "/individual-expenses";
     }
 
     @GetMapping("/group/{groupId}/edit/individual-expense/{expenseId}")
@@ -77,7 +77,7 @@ public class IndividualExpenseController {
             expenseToUpdate.setName(formExpense.getName());
             expenseToUpdate.setAmount(formExpense.getAmount());
             individualExpenseService.updateIndividualExpense(expenseToUpdate);
-            return "redirect:/group/edit/" + groupId;
+            return "redirect:/group/edit/" + groupId + "/individual-expenses";
         }
         return "edit_individual_expense";
     }
@@ -111,7 +111,7 @@ public class IndividualExpenseController {
             formExpense.setIdGroup(groupId);
             IndividualExpenseEntity newExpense = individualExpenseService.addIndividualExpense(formExpense);
             if (newExpense != null)
-                return "redirect:/group/edit/" + groupId;
+                return "redirect:/group/edit/" + groupId + "/individual-expenses";
             model.addAttribute("invalidFormData", "Oops! The expense creation failed.");
         }
         return "add_individual_expense";
