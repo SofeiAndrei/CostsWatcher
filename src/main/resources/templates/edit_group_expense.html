@@ -23,7 +23,9 @@
                 <input type="text" id="uname" th:value="${member.get(0)}" disabled>
                 <label for="amount"><b>Amount ($)</b></label>
                 <input type="number" id="amount" th:value="${member.get(2)}" disabled>
-                <a th:href="@{'/group/'+ *{idGroup} +'/edit/group-expense/' + *{idExpense} + '/delete-member/' + ${member.get(1)}}" class="item-button">Delete</a>
+                <a th:href="@{'/group/'+ *{idGroup} +'/edit/group-expense/' + *{idExpense} + '/delete-member/' + ${member.get(1)}}" class="item-button">
+                    <img src="/images/bin.png" alt="Delete" style="width: 24px; height: 24px;">
+                </a>
             </div>
         </div>
     </form>
@@ -33,7 +35,9 @@
     </form>
 
     <form th:action="@{'/group/edit/' + ${groupId} + '/group-expenses'}" method="get">
-        <button type="submit">Back</button>
+        <button type="submit" style="padding-top: 10px; padding-bottom: 10px;">
+            <img src="/images/back.png" alt="Back" style="width: 24px; height: 24px;">
+        </button>
     </form>
 
     <h3 th:text="${invalidFormData}"></h3>

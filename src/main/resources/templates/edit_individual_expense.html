@@ -24,7 +24,9 @@
     </form>
 
     <form th:action="@{'/group/edit/' + ${groupId} + '/individual-expenses'}" method="get">
-        <button type="submit">Back</button>
+        <button type="submit" style="padding-top: 10px; padding-bottom: 10px;">
+            <img src="/images/back.png" alt="Back" style="width: 24px; height: 24px;">
+        </button>
     </form>
 
     <h3 th:text="${invalidFormData}"></h3>

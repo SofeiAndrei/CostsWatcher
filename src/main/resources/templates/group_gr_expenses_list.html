@@ -30,8 +30,12 @@
                 <li class="expenses-list-item">
                     <span class="item-text" th:text="${expense.name}"></span>
                     <div th:if="${signedInUser.getIdUser() == group.getOrganizer().getIdUser() || isParticipantMap[expense.getIdExpense()] == true}" class="item-buttons">
-                        <a th:href="@{'/group/'+ ${group.idGroup} +'/edit/group-expense/' + ${expense.idExpense}}" class="item-button">Edit</a>
-                        <a th:href="@{'/group/'+ ${group.idGroup} +'/delete/group-expense/' + ${expense.idExpense}}" class="item-button">Delete</a>
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/edit/group-expense/' + ${expense.idExpense}}" class="item-button">
+                            <img src="/images/edit.png" alt="Edit" style="width: 24px; height: 24px;">
+                        </a>
+                        <a th:href="@{'/group/'+ ${group.idGroup} +'/delete/group-expense/' + ${expense.idExpense}}" class="item-button">
+                            <img src="/images/bin.png" alt="Delete" style="width: 24px; height: 24px;">
+                        </a>
                     </div>
                     <div th:unless="${signedInUser.getIdUser() == group.getOrganizer().getIdUser() || isParticipantMap[expense.getIdExpense()] == true}" class="item-buttons">
                         <a th:href="@{'/group/'+ ${group.idGroup} +'/show/group-expense/' + ${expense.idExpense}}" class="item-button">Show</a>
