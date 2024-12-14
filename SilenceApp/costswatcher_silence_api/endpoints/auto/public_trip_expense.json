@@ -1,0 +1,60 @@
+{
+    "getAll": {
+        "description": "Gets all entries from 'public_trip_expense'",
+        "route": "/get-trip-expenses",
+        "method": "GET",
+        "sql": "SELECT trip_location, AVG(trip_expense) AS trip_expense FROM public_trip_expense GROUP BY trip_location",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "create": {
+        "description": "Submit a new trip expense",
+        "route": "/submit-trip-expense",
+        "method": "POST",
+        "sql": "INSERT INTO public_trip_expense (trip_location, trip_expense) VALUES ($trip_location, $trip_expense)",
+        "request_body_params": [
+            "trip_location",
+            "trip_expense"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "getById": {
+        "description": "Gets an entry from 'public_trip_expense' by its primary key",
+        "route": "/public_trip_expense/$id_expense",
+        "method": "GET",
+        "sql": "SELECT * FROM public_trip_expense WHERE id_expense = $id_expense",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "update": {
+        "description": "Updates an existing entry in 'public_trip_expense' by its primary key",
+        "route": "/public_trip_expense/$id_expense",
+        "method": "PUT",
+        "sql": "UPDATE public_trip_expense SET trip_location = $trip_location, trip_expense = $trip_expense WHERE id_expense = $id_expense",
+        "request_body_params": [
+            "trip_location",
+            "trip_expense"
+        ],
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    },
+    "delete": {
+        "description": "Deletes an existing entry in 'public_trip_expense' by its primary key",
+        "route": "/public_trip_expense/$id_expense",
+        "method": "DELETE",
+        "sql": "DELETE FROM public_trip_expense WHERE id_expense = $id_expense",
+        "auth_required": false,
+        "allowed_roles": [
+            "*"
+        ]
+    }
+}

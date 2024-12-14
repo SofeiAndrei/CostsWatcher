@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Public expenses</title>
+    <link th:href="@{/public_expenses.css}" rel="stylesheet" />
+</head>
+<body style="background-color: #FEFCE7;">
+    <nav class="navbar">
+        <div class="navbar-brand">CostsWatcher</div>
+    </nav>
+
+    <div class="box">
+        <h1 id="page-header">Average expense amount per location</h1><br>
+
+        <img th:if="${expenses.isEmpty()}" th:src="@{/images/empty_list.png}" id="empty-image" alt="empty"/>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Trip Location</th>
+                <th>Trip Expense Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="expense : ${expenses}">
+                <td style="text-align: center;" th:text="${expense.getTripLocation()}"></td>
+                <td style="text-align: center;" th:text="${expense.getTripExpenseAmount()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br/>
+
+        <div class="box-buttons">
+            <a th:href="@{/}" class="item-button">Back</a>
+        </div>
+    </div>
+</body>
+</html>
